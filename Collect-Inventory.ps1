@@ -128,19 +128,49 @@ $ip      = (Get-NetIPAddress -AddressFamily IPv4 -ErrorAction SilentlyContinue |
             Where-Object { $_.IPAddress -notlike "127.*" -and $_.IPAddress -notlike "169.254.*" } |
             Select-Object -First 1 -ExpandProperty IPAddress)
 
+# GPU - captures all video controllers (some laptops have integrated + discrete)
+$gpu = (Get-CimInstance Win32_VideoController -ErrorAction SilentlyContinue |
+        ForEach-Object { $_.Name }) -join " ;; "
+if (-not $gpu) { $gpu = "Not detected" }
+
+# Currently logged-in interactive user. Blank when run via Invoke-Command against
+# a machine with nobody sitting at it - that's expected, not an error.
+$currentUser = $cs.UserName
+if (-not $currentUser) { $currentUser = "No user logged in" }
+
+# MAC address of the active network adapter (same one the IP above came from)
+$mac = (Get-NetAdapter -ErrorAction SilentlyContinue |
+        Where-Object { $_.Status -eq "Up" } |
+        Select-Object -First 1 -ExpandProperty MacAddress)
+if (-not $mac) { $mac = "Not detected" }
+
+# Domain or Workgroup - confirms machine hasn't drifted onto a domain unexpectedly
+$domainOrWorkgroup = if ($cs.PartOfDomain) { "Domain: $($cs.Domain)" } else { "Workgroup: $($cs.Workgroup)" }
+
+# Last boot time / uptime - flags machines that rarely restart (patch/update risk)
+$lastBoot = $os.LastBootUpTime
+$uptime = (Get-Date) - $lastBoot
+$uptimeStr = "{0}d {1}h {2}m" -f $uptime.Days, $uptime.Hours, $uptime.Minutes
+$bootInfo = "Last boot: $($lastBoot.ToString('yyyy-MM-dd HH:mm')) (up $uptimeStr)"
+
 $peripherals = Get-PeripheralInfo
 
 $inventory = [PSCustomObject]@{
     Timestamp     = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
     Hostname      = $env:COMPUTERNAME
     IPAddress     = $ip
+    MACAddress    = $mac
+    CurrentUser   = $currentUser
+    DomainWorkgroup = $domainOrWorkgroup
     Manufacturer  = $cs.Manufacturer
     Model         = $cs.Model
     SerialNumber  = $bios.SerialNumber
     CPU           = $cpu.Name
+    GPU           = $gpu
     RAM_GB        = $ram_gb
     Storage       = ($disks -join " ;; ")
     WindowsVersion= "$($os.Caption) ($($os.Version))"
+    Uptime        = $bootInfo
     Monitor       = Get-MonitorInfo
     Keyboard      = $peripherals.Keyboard
     Mouse         = $peripherals.Mouse
