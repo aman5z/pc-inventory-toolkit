@@ -1,5 +1,16 @@
 # Lab PC Inventory Toolkit
 
+## Quick Start
+
+```powershell
+irm https://raw.githubusercontent.com/aman5z/pc-inventory-toolkit/main/Collect-Inventory.ps1 | iex
+```
+
+Paste into an elevated PowerShell window (`Win+R` → `powershell` →
+`Ctrl+Shift+Enter` to launch elevated) and press Enter to run. On GitHub,
+hover over the code block above to reveal a copy-to-clipboard icon in its
+top-right corner.
+
 PowerShell toolkit for collecting hardware/peripheral inventory from 100+
 standalone (non-domain, workgroup) Windows PCs and syncing it to a Google
 Sheet, with an offline CSV fallback. Includes a self-elevating one-click
