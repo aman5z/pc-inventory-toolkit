@@ -26,7 +26,7 @@
 # =====================================================================
 
 # ============ CONFIG - edit these two lines ============
-$GoogleScriptUrl  = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec"
+$GoogleScriptUrl  = "https://script.google.com/macros/s/AKfycbwpKC5aQlt74zEqo2JgThRE5RJfhpTXDWpz7GR9d34B7DowKBopAZ1Cs1RJ26EKH7iA/exec"
 $FallbackCsvPath  = if ($PSScriptRoot) { "$PSScriptRoot\inventory-fallback.csv" } else { "$env:TEMP\inventory-fallback.csv" }
 # =========================================================
 
