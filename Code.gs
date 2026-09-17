@@ -1,9 +1,9 @@
 const SHEET_NAME = "INVENTORY"; // tab name in your Google Sheet
 
 const HEADERS = [
-  "Timestamp", "Hostname", "IPAddress", "Manufacturer", "Model",
-  "SerialNumber", "CPU", "RAM_GB", "Storage", "WindowsVersion",
-  "Monitor", "Keyboard", "Mouse", "Printers"
+  "Timestamp", "Hostname", "IPAddress", "MACAddress", "CurrentUser", "DomainWorkgroup",
+  "Manufacturer", "Model", "SerialNumber", "CPU", "GPU", "RAM_GB", "Storage",
+  "WindowsVersion", "Uptime", "Monitor", "Keyboard", "Mouse", "Printers"
 ];
 
 function doPost(e) {
