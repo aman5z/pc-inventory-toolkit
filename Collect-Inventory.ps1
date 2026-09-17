@@ -1,4 +1,4 @@
-﻿# =====================================================================
+# =====================================================================
 # Collect-Inventory.ps1
 #
 # Collects hardware/software inventory from a Windows PC and uploads it to a
@@ -27,7 +27,7 @@
 
 # ============ CONFIG - edit these two lines ============
 $GoogleScriptUrl  = "https://script.google.com/macros/s/AKfycbwpKC5aQlt74zEqo2JgThRE5RJfhpTXDWpz7GR9d34B7DowKBopAZ1Cs1RJ26EKH7iA/exec"
-$FallbackCsvPath  = "$PSScriptRoot\inventory-fallback.csv"   # used if upload fails (e.g. USB drive path)
+$FallbackCsvPath  = if ($PSScriptRoot) { "$PSScriptRoot\inventory-fallback.csv" } else { "$env:TEMP\inventory-fallback.csv" }
 # =========================================================
 
 # ---- One-time remote-access setup (safe to run every time, skips if already done) ----
